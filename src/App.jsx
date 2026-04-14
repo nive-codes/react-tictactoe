@@ -32,8 +32,13 @@ function deriveActivePlayer(gameTurns){
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]); //게임 턴을 진행할때마다 배열 생성(log row 추가 느낌)
+  const [players, setPlayers]= useState({
+    'X' : 'Player 1',
+    'O' : 'Player 2'
+  })
   // const [hasWinnter, setHasWinner] = useState(false); //사실 불필요. 매번 update될때마다 gameTurns에 있기 때문.
   // const [activePlayer, setActivePlayer] = useState('X'); //gameTurns에 포함되어 있으므로 주석
+  
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
@@ -62,12 +67,11 @@ function App() {
       && firstSquareSymbol === secondSquareSymbol 
       && firstSquareSymbol === thirdSquareSymbol){
 
-     winner = firstSquareSymbol;     
+     winner = players[firstSquareSymbol];       //name을 winner를 통해 GameOver로 전달
     }
   }
 
   const hasDraw = gameTurns.length === 9 && !winner;
-
 
 
   function handleSelectSquare(rowIndex, colIndex){
@@ -85,15 +89,32 @@ function App() {
 
   function handleRestart(){
     setGameTurns([]); //배열 초기화로 상태 초기화
+  }
 
+  /**
+   * Player.jsx의 useState를 App.jsx로 가져오면 매번 초기화 되므로, 변경된 이름을 가져와서
+   * App.js의 상태 값에 바꿔서 처리하도록 처리
+   * @param {*} symbol 
+   * @param {*} newName 
+   */
+  function handlePlayerNameChange(symbol, newName){
+    setPlayers((prevPlayers) => {
+      return {
+        ...prevPlayers,   // 기존 사애값을 유지 하되 모든 객체의 값을 펼치고
+        [symbol]: newName   // symbol을 key로 활용([] 대괄호) 해서 name을 업데이트 name을 덮어씌우는 방식
+      }
+    });
+
+    // ex : prevPlayers에서 { X: 'Mike', O: 'Jane' } 값이 있는거고, 해당 값의 symbol과 일치하는 것을 교체 후 '객체'자체를 return해서 상태 업데이트
+    // ex2 : symbole X고 newName이 'Max인 경우, { X: 'Max', O: 'Jane' }가 되는 형태
   }
 
   return <main>
     <div id="game-container">
       {/* PLAYERS */}
       <ol id="players" className="highlight-player">
-        <Player initialName="Player 1" symbole="X" isActive={activePlayer === 'X'}/>
-        <Player initialName="Player 2" symbole="O" isActive={activePlayer === 'O'}/>
+        <Player initialName="Player 1" symbole="X" isActive={activePlayer === 'X'} onchangeName={handlePlayerNameChange}/>
+        <Player initialName="Player 2" symbole="O" isActive={activePlayer === 'O'} onchangeName={handlePlayerNameChange}/>
       </ol>
 
       

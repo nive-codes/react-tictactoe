@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-export default function Player({initialName, symbole, isActive}){
-    const [playName, setPlayerName] =  useState(initialName);
+export default function Player({initialName, symbole, isActive, onchangeName}){
+    const [playerName, setPlayerName] =  useState(initialName);
     const [isEditing, setIsEditing] = useState(false);   //변경 여부 상태값
 
     function handleEditiClick(){
@@ -9,6 +9,12 @@ export default function Player({initialName, symbole, isActive}){
       // setIsEditing(!isEditing)  //두번째에서도 첫번째의 변화가 예약이 걸린 상태이므로 실행 자체가 되지 않음.
 
       setIsEditing((editing) => !isEditing)   //항상 최신 버전인 상태 
+
+      //수정이 진행 될 때 App.jsx에서 최신 이름 정보를 상태에 반영
+      if(isEditing){
+        onchangeName(symbole, playerName); //
+      }
+      
     }
 
     function handleChange(event){
@@ -17,11 +23,11 @@ export default function Player({initialName, symbole, isActive}){
       
     }
 
-    let editablePlayerName = <span className="player-name">{playName}</span>;
+    let editablePlayerName = <span className="player-name">{playerName}</span>;
     // let btnCaption = 'Edit';
 
     if(isEditing){
-      editablePlayerName = <input type="text" required value={playName} onChange={handleChange}/>;
+      editablePlayerName = <input type="text" required value={playerName} onChange={handleChange}/>;
       // btnCaption = 'Save';
     }
 
