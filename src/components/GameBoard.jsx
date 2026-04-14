@@ -6,15 +6,17 @@ const initialGameBoard = [
     [null, null, null]
 ]
 
-export default function GameBoard(){
+export default function GameBoard({onSelectSquare, activePlayerSymbol}){
     const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
     function handleSelectSquare(rowIndex, colIndex){
         setGameBoard((prevGameBoard) => {
             const updatedBoard = [...prevGameBoard.map(innerArray => [...innerArray])];    //메모리에 저장되는 새로운 게임보드로, prevGameBoard의 정보를 모두 가지고 있음.
-            updatedBoard[rowIndex][colIndex] = 'X';
+            updatedBoard[rowIndex][colIndex] = activePlayerSymbol;
             return updatedBoard;
         }); //이전 상태를 가진 채로 이동
+
+        onSelectSquare();
     }
 
     return <ol id="game-board">
