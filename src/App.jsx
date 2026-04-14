@@ -37,7 +37,7 @@ function App() {
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map(array => [...array])];
 
   /**
    * gameboard처리
@@ -83,6 +83,11 @@ function App() {
     });
   }
 
+  function handleRestart(){
+    setGameTurns([]); //배열 초기화로 상태 초기화
+
+  }
+
   return <main>
     <div id="game-container">
       {/* PLAYERS */}
@@ -92,7 +97,7 @@ function App() {
       </ol>
 
       
-      {(winner || hasDraw) && <GameOver winner={winner}/>}
+      {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>}
       {/* gameboard에서 사용할 player의 상태값을 확인하는 것을 gameboard에서 실행*/}
       <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}/>  
     </div>
