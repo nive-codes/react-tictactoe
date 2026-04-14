@@ -32,7 +32,7 @@ function App() {
       {/* gameboard에서 사용할 player의 상태값을 확인하는 것을 gameboard에서 실행*/}
       <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns}/>  
     </div>
-    <Log/>
+    <Log turns={gameTurns}/>
   </main>;
 }
 
