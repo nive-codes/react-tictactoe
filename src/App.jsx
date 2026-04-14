@@ -3,6 +3,7 @@ import GameBoard from "./components/GameBoard";
 import { useState } from "react";
 import Log from "./components/Log";
 import { WINNING_COMBINATIONS } from "./components/winning-combinations";
+import GameOver from "./components/GameOver";
 
 
 /**
@@ -53,17 +54,20 @@ function App() {
   //우승 검토 처리
   for(const combination of WINNING_COMBINATIONS){
     const firstSquareSymbol = gameBoard[combination[0].row][combination[0].column];
-    const secondSquareSymbol = gameBoard[combination[1].row][combination[2].column]
-    const thirdSquareSymbol= gameBoard[combination[2].row][combination[1].column];
+    const secondSquareSymbol = gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
+
 
     if(firstSquareSymbol
       && firstSquareSymbol === secondSquareSymbol 
       && firstSquareSymbol === thirdSquareSymbol){
-          
-    }{
-      winner = firstSquareSymbol;
+
+     winner = firstSquareSymbol;     
     }
   }
+
+  const hasDraw = gameTurns.length === 9 && !winner;
+
 
 
   function handleSelectSquare(rowIndex, colIndex){
@@ -88,7 +92,7 @@ function App() {
       </ol>
 
       
-      {winner && <p>You Won, {winner}!</p>}
+      {(winner || hasDraw) && <GameOver winner={winner}/>}
       {/* gameboard에서 사용할 player의 상태값을 확인하는 것을 gameboard에서 실행*/}
       <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard}/>  
     </div>
