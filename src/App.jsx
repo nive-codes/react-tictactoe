@@ -2,17 +2,30 @@ import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import { useState } from "react";
 import Log from "./components/Log";
+
+// 상태를 최소한으로 사용하도록 처리
+// playser state를 삭제하고 사용할 헬퍼 함수 
+function deriveActivePlayer(gameTurns){
+  let currentPlayer = 'X';
+      if(gameTurns.length > 0 && gameTurns[0].player === 'X'){
+        currentPlayer = 'O';
+  }
+
+  return currentPlayer;
+}
+
 function App() {
   const [gameTurns, setGameTurns] = useState([]); //게임 턴을 진행할때마다 배열 생성(log row 추가 느낌)
-  const [activePlayer, setActivePlayer] = useState('X');
+  // const [activePlayer, setActivePlayer] = useState('X');
+
+  const activePlayer = deriveActivePlayer(gameTurns);
+
 
   function handleSelectSquare(rowIndex, colIndex){
-    setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X') //기존 사용자 확인
+    // setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X') //기존 사용자 확인
     setGameTurns(prevTurns => {
-      let currentPlayer = 'X';
-      if(prevTurns.length > 0 && prevTurns[0].player === 'X'){
-        currentPlayer = 'O';
-      }
+
+      const currentPlayer = deriveActivePlayer(prevTurns);
 
       const updatedTurns = [{ square: {row: rowIndex, col: colIndex},player: currentPlayer},
         ...prevTurns];
